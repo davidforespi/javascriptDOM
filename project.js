@@ -1,4 +1,13 @@
 const body = document.body;
+const grafica = document.getElementById('grafica');
+
+function toggleGraphFrame() {
+      if (grafica.style.display === 'none') {
+        grafica.style.display = 'block';
+      } else {
+        grafica.style.display = 'none';
+      }
+    }
 
 document.addEventListener('keydown', function (event) {
 
@@ -120,6 +129,9 @@ document.addEventListener('keydown', function (event) {
         .catch(error => {
           console.log('Error al iniciar la llamada:', error);
         });
+      break;
+      case 'g':
+      toggleGraphFrame();
       break;
   }
 });

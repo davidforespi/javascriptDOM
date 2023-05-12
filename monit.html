@@ -1,0 +1,106 @@
+
+<!DOCTYPE HTML>
+<html>
+<head><title></title>
+<script>
+window.onload = function () {
+var dps = []; // dataPoints
+var chart = new CanvasJS.Chart("chartContainer", {
+        title :{
+                //text: "Monitorizar la Red"
+        },
+        axisY: {
+                title: "Bytes Recibidos",
+                includeZero: false
+
+        },
+        axisX: {
+                title: "Tiempo (Segundos)",
+        },
+        data: [{
+                type: "line",
+                dataPoints: dps
+        }]
+});
+
+var dat="";
+var xVal = 0;
+var yVal = 100;
+var updateInterval = 2500;
+var dataLength = 5; // number of dataPoints visible at any point
+
+function readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                lectura_archivo = rawFile.responseText;
+            }
+        }
+    }
+    rawFile.send(null);
+return lectura_archivo
+}
+
+function parser_monit(){
+        lectura_archivo=readTextFile("data.csv");
+        len_lectura_archivo= lectura_archivo.length;
+        //document.write(lectura_archivo)
+        var a=0
+        var c=0;
+        var f=0;
+        var datos=[];
+        for(var s=0;s<=len_lectura_archivo-1;s++){
+                if (lectura_archivo[s]==";"){
+                   c++;
+                }
+                else {
+                        if (c==3){
+                          dat+=lectura_archivo[s]
+                        }
+                        if (c==4){
+                          datos=parseInt(dat)
+                          c=0;
+                        }
+                }
+                if (lectura_archivo[s]=="\n"){
+                   c=0
+                   dat=""
+               }
+        }
+return datos
+}
+var updateChart = function (count) {
+
+        count = count || 1;
+
+        for (var j = 0; j < count; j++) {
+                yVal = parser_monit()
+                //document.write(yVal+"<br>")
+                dps.push({
+                        x: xVal,
+                        y: yVal
+                });
+                xVal++;
+        }
+        if (dps.length > dataLength) {
+                dps.shift();
+        }
+        chart.render();
+};
+updateChart(dataLength);
+setInterval(function(){updateChart()}, updateInterval);
+}
+</script>
+</head>
+<body>
+<h1 style="text-align:center; color:#4f82bc; font-size:30px;font-family: Helvetica, Arial;">Monitorizaci&oacute;n de la interfaz de red de la raspberry pi</h1><br>
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+</html>
