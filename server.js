@@ -22,8 +22,8 @@ app.post('/makecall', (req, res) => {
 
     const {number} = req.body;
     
-    const accountSid = "AC6643f3cb9b3c54539d54955cd611cabd";
-    const authToken = "7d20a3ebb1f3bf01bfa386527de8b579";
+    const accountSid = "AC6643f3cb9b3c";
+    const authToken = "7d20a3ebb1f3b";
 
     const client = require("twilio")(accountSid, authToken);
 
@@ -43,8 +43,8 @@ app.post('/sendEmail', (req, res) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-	user: 'godrestaurant13@gmail.com',
-        pass: 'deekjduvulgzjink'        
+	user: '',
+        pass: ''        
       }
     });
   
